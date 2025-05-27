@@ -1,0 +1,10 @@
+---
+- name: Pievieno administratoru visos hostos
+  hosts: all
+  become: yes
+  vars:
+    new_user: adminuser
+    new_user_comment: Admin User
+    # new_user_ssh_pubkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC..."
+  roles:
+    - user
