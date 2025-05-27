@@ -1,0 +1,6 @@
+---
+- name: Konfigure Chrony NTP sinhronizaciju uz visiem hostiem
+  hosts: all
+  become: yes
+  roles:
+    - chrony

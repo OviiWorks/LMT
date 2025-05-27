@@ -1,0 +1,13 @@
+---
+- name: Izpilda visas konfigurācijas darbības uz visiem hostiem
+  hosts: all
+  become: yes
+  vars:
+    new_user: adminuser
+    new_user_comment: Admin User
+    #new_user_ssh_pubkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC..."  # opcional, atkomentē ja nepieciešams
+    zabbix_server: "10.0.0.1"  # Zabbix servera IP
+  roles:
+    - user
+    - zabbix_agent
+    - chrony

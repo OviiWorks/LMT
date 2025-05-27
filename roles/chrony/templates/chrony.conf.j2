@@ -1,0 +1,15 @@
+driftfile /var/lib/chrony/drift
+makestep 1.0 3
+
+{% if inventory_hostname in ['hostname1', 'hostname4'] %}
+server ntp.aaa.local iburst
+{% elif inventory_hostname in ['hostname2', 'hostname3', 'hostname5'] %}
+server ntp.zzz.local iburst
+{% else %}
+# Default fallback
+server 0.pool.ntp.org iburst
+{% endif %}
+
+rtcsync
+allow 0.0.0.0/0
+logdir /var/log/chrony

@@ -1,0 +1,19 @@
+---
+- name: Uzstada chrony
+  ansible.builtin.package:
+    name: chrony
+    state: present
+
+- name: Konfigure chrony
+  ansible.builtin.template:
+    src: chrony.conf.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Startē un iespējo chronyd servisu
+  ansible.builtin.service:
+    name: chronyd
+    enabled: yes
+    state: started
