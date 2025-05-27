@@ -1,5 +1,5 @@
 
-# Lietotāja pievienošana ar sudo tiesībām
+# 👤 Lietotāja pievienošana ar sudo tiesībām
 
 ## 📋 Apraksts
 
@@ -50,3 +50,83 @@ Palaidiet šo komandu, lai pievienotu jauno lietotāju visos hostos:
 ```bash
 ansible-playbook -i inventory.ini add-user.yml
 ```
+
+<br><br><br>
+
+# 📡 Zabbix Agent2 Uzstādīšana un Konfigurācija
+
+
+Šī Ansible loma uzstāda Zabbix Agent2 visos mērķa hostos un konfigurē to atbilstoši norādītajam Zabbix serverim.
+
+---
+
+## 🔧 Funkcionalitāte
+
+- Lejupielādē un uzstāda Zabbix Agent2 pakotni atkarībā no operētājsistēmas:
+  - **Debian / Ubuntu**: `.deb` pakotne  
+    [zabbix-agent2_7.2.7-1+ubuntu24.04_arm64.deb](https://repo.zabbix.com/zabbix/7.2/stable/ubuntu/pool/main/z/zabbix/zabbix-agent2_7.2.7-1+ubuntu24.04_arm64.deb)
+  - **RedHat / CentOS**: `.rpm` pakotne  
+    [zabbix-agent2-7.2.7-release1.el9.x86_64.rpm](https://repo.zabbix.com/zabbix/7.2/stable/rhel/9/x86_64/zabbix-agent2-7.2.7-release1.el9.x86_64.rpm)
+
+- Izveido konfigurāciju no `zabbix_agent2.conf.j2`
+  - `Server` – Zabbix servera IP vai hostname
+  - `ServerActive` – Zabbix servera IP vai hostname
+  - `Hostname` – mērķa hosta hostname
+
+- Startē un iespējo `zabbix-agent2` servisu
+
+---
+
+## 📁 Failsistēmas Struktūra
+
+```
+roles/
+└── zabbix_agent/
+    ├── tasks/
+    │   └── main.yml
+    └── templates/
+        └── zabbix_agent2.conf.j2
+```
+
+---
+
+## 📝 Playbook Piemērs (`zabbix_agent2.yml`)
+
+```yaml
+- hosts: all
+  become: yes
+  vars:
+    zabbix_server: "10.0.0.1"  # aizvieto ar Zabbix servera IP vai hostname
+  roles:
+    - zabbix_agent
+```
+
+---
+
+## 🧩 Šablons: `zabbix_agent2.conf.j2`
+
+```jinja
+PidFile=/run/zabbix/zabbix_agent2.pid
+LogType=file
+LogFile=/var/log/zabbix/zabbix_agent2.log
+LogFileSize=0
+Server={ zabbix_server }
+ServerActive={ zabbix_server }
+Hostname={ inventory_hostname }
+Include=/etc/zabbix/zabbix_agent2.d/*.conf
+```
+
+---
+
+## ▶️ Izpilde
+
+```bash
+ansible-playbook -i inventory.ini zabbix_agent2.yml
+```
+
+---
+
+## 📌 Piezīmes
+
+- Pārliecinies, ka mērķa hostiem ir piekļuve internetam Zabbix pakotņu lejupielādei.
+- Hostiem jābūt ar `sudo` piekļuvi.

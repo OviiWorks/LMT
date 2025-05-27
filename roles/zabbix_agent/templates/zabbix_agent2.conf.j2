@@ -1,0 +1,6 @@
+PidFile=/run/zabbix/zabbix_agent2.pid
+LogFile=/var/log/zabbix/zabbix_agent2.log
+Server={{ zabbix_server }}
+ServerActive={{ zabbix_server }}
+Hostname={{ inventory_hostname }}
+Include=/etc/zabbix/zabbix_agent2.d/*.conf

@@ -1,0 +1,6 @@
+- hosts: all
+  become: yes
+  vars:
+    zabbix_server: "10.0.0.1"  # Šeit ievieto Zabbix servera IP vai hostname
+  roles:
+    - zabbix_agent
